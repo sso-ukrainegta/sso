@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Сили спеціальних операцій</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+
+    .logo {
+      height: 45px;
+      transition: all 0.5s ease;
+    }
+
+    nav {
+      display: flex;
+      gap: 15px;
+    }
+
+    nav a {
+      background: linear-gradient(to right, #0044cc, #007bff);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0, 64, 255, 0.3);
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    nav a:hover {
+      transform: scale(1.05);
+      background: linear-gradient(to right, #003bb3, #0066cc);
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background: #333;
+      margin: 4px 0;
+      transition: 0.4s;
+    }
+
+    .hero {
+      height: 100vh;
+      background-image: url('oper.jpg');
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(255,255,255,0.1));
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      animation: fadeIn 2s ease;
+    }
+
+    .hero-content img {
+      width: 120px;
+      filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+      margin-bottom: 20px;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+    }
+
+    .hero-content p {
+      font-size: 1.4rem;
+      margin-top: 10px;
+      font-style: italic;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .about {
+      background: #fff;
+      padding: 80px 20px 100px;
+      margin-top: -40px;
+      border-radius: 30px 30px 0 0;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+    }
+
+    .about .container {
+      max-width: 850px;
+      margin: 0 auto;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: 1s ease;
+    }
+
+    .about h2 {
+      font-size: 2.7rem;
+      color: #003a99;
+      margin-bottom: 25px;
+    }
+
+    .about p {
+      font-size: 1.15rem;
+      color: #333;
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+
+    .divider {
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, #003a99, #007bff);
+      margin: 20px auto;
+      border-radius: 5px;
+    }
+
+    .about .highlight {
+      color: #003a99;
+      font-weight: 700;
+      border-bottom: 2px solid #003a99;
+      padding-bottom: 2px;
+    }
+
+    .about blockquote {
+      margin: 25px 0;
+      font-style: italic;
+      font-size: 1.2rem;
+      background: #eef3ff;
+      border-left: 5px solid #003a99;
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: #2c3e50;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .about .patriot {
+      font-weight: bold;
+      color: #c21807;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .about .intro {
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+      color: #111;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* --- Loading Overlay --- */
+    #loadingOverlay {
+      position: fixed;
+      z-index: 9999;
+      inset: 0;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 1s ease;
+    }
+
+    #loadingOverlay img {
+      width: 150px;
+      opacity: 0;
+      transform: scale(1.5);
+      transition: opacity 1s ease, transform 2s ease;
+    }
+
+    #loadingOverlay.loaded {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #loadingOverlay.loaded img {
+      transform: translateY(-40vh) scale(1);
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background: #fff;
+        padding: 10px 15px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      }
+
+      nav.show {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading overlay -->
+  <div id="loadingOverlay">
+    <img src="emblem.png" alt="Емблема" id="loadingEmblem" />
+  </div>
+
+  <header>
+    <nav id="mainNav">
+      <a href="news.html">Новини</a>
+      <a href="leader.html">Керівний склад</a>
+      <a href="tac.html">Тактики</a>
+      <a href="top.html">Кращі бійці</a>
+    </nav>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <img src="emblem.png" alt="Емблема ССО" />
+      <h1>СИЛИ СПЕЦІАЛЬНИХ ОПЕРАЦІЙ</h1>
+      <p>“Завжди перші!”</p>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="container" id="aboutContainer">
+      <h2>Про підрозділ</h2>
+      <div class="divider"></div>
+      <p class="intro">
+        <span class="highlight">Сили спеціальних операцій</span> — елітний підрозділ Збройних Сил України, створений для вирішення
+        найскладніших та найнебезпечніших завдань у сфері національної безпеки.
+      </p>
+      <p>
+        Воїни ССО — це <strong>добровольці з надзвичайною витримкою, фізичною та моральною підготовкою</strong>. Вони діють в тилу ворога, ведуть розвідку, здійснюють точкові удари, рятують заручників, захищають державні інтереси в будь-якій точці світу.
+      </p>
+      <blockquote>
+        “Сила не в кількості — сила в якості. Ми — ті, хто діє точно та рішуче.”
+      </blockquote>
+      <p>
+        ССО — це <span class="patriot">відвага, честь, безстрашність</span>. Ми — завжди перші, коли Україна потребує найкращих.
+      </p>
+    </div>
+  </section>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.getElementById('mainNav');
+      nav.classList.toggle('show');
+    }
+
+    // Scroll animation
+    window.addEventListener('scroll', () => {
+      const about = document.getElementById('aboutContainer');
+      const position = about.getBoundingClientRect().top;
+      const screenHeight = window.innerHeight;
+      if (position < screenHeight - 100) {
+        about.style.opacity = '1';
+        about.style.transform = 'translateY(0)';
+      }
+    });
+
+    // Loading animation
+    window.addEventListener("load", () => {
+      const overlay = document.getElementById("loadingOverlay");
+      const emblem = document.getElementById("loadingEmblem");
+
+      setTimeout(() => {
+        emblem.style.opacity = "1";
+        emblem.style.transform = "scale(1)";
+      }, 300);
+
+      setTimeout(() => {
+        overlay.classList.add("loaded");
+      }, 2000);
+    });
+  </script>
+</body>
+</html>

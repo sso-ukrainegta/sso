@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Новини підрозділу</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: url("back.jpg") no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      padding: 100px 20px 40px;
+    }
+
+    header {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 20px;
+      z-index: 999;
+    }
+
+    header img {
+      height: 50px;
+      cursor: pointer;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 6px black;
+    }
+
+    .controls {
+      max-width: 1000px;
+      margin: 0 auto 30px;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .search-wrapper {
+      position: relative;
+      width: 300px;
+    }
+
+    .search-wrapper svg {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      fill: #999;
+      pointer-events: none;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 10px 10px 40px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background-color: rgba(255,255,255,0.1);
+      color: white;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      transition: background 0.3s ease;
+    }
+
+    input[type="text"]::placeholder {
+      color: #ccc;
+    }
+
+    .news-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      gap: 20px;
+    }
+
+    .news-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+    }
+
+    .news-title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .news-description {
+      color: #000;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .modal-content {
+      background: rgba(30,30,30,0.95);
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 600px;
+      width: 90%;
+      color: white;
+      box-shadow: 0 0 20px #000;
+    }
+
+    .modal-content img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .close-btn {
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+      margin-top: -10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="emblem.png" alt="Емблема" onclick="window.location.href='index.html'">
+  </header>
+
+  <h1>Новини підрозділу</h1>
+
+  <div class="controls">
+    <div class="search-wrapper">
+      <svg viewBox="0 0 24 24">
+        <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34C15.07 5.59 12.53 3 9.5 3S3.93 5.59 3.93 8.39c0 2.8 2.54 5.39 5.57 5.39a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25 1.49-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+      <input type="text" id="search" placeholder="Пошук новин...">
+    </div>
+  </div>
+
+  <div class="news-container" id="newsContainer"></div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2 id="modalTitle"></h2>
+      <p id="modalDate" style="color:#aaa; font-size:14px;"></p>
+      <img id="modalImage" src="" alt="">
+      <p id="modalBody"></p>
+    </div>
+  </div>
+
+  <script>
+    let allNews = [];
+
+    function renderNews(newsList) {
+      const container = document.getElementById("newsContainer");
+      container.innerHTML = "";
+      newsList.forEach(news => {
+        const card = document.createElement("div");
+        card.className = "news-card";
+        card.innerHTML = `
+          <div class="news-title">${news.title}</div>
+          <div class="news-description">${news.description}</div>
+        `;
+        card.onclick = () => openModal(news);
+        container.appendChild(card);
+      });
+    }
+
+    function openModal(news) {
+      document.getElementById("modalTitle").innerText = news.title;
+      document.getElementById("modalDate").innerText = news.date;
+      document.getElementById("modalImage").src = news.image;
+      document.getElementById("modalBody").innerText = news.fullText;
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    document.getElementById("search").addEventListener("input", e => {
+      const val = e.target.value.toLowerCase();
+      const filtered = allNews.filter(n =>
+        n.title.toLowerCase().includes(val) ||
+        n.description.toLowerCase().includes(val)
+      );
+      renderNews(filtered);
+    });
+
+    fetch('news.json')
+      .then(res => res.json())
+      .then(data => {
+        allNews = data;
+        renderNews(allNews);
+      })
+      .catch(() => {
+        document.getElementById("newsContainer").innerHTML = "<p>Не вдалося завантажити новини.</p>";
+      });
+  </script>
+</body>
+</html>

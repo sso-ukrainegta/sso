@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Кращі бійці</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: url("back.jpg") no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      padding: 100px 20px 40px;
+    }
+
+    header {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 20px;
+      z-index: 999;
+    }
+
+    header img {
+      height: 50px;
+      cursor: pointer;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 40px;
+      text-shadow: 1px 1px 6px black;
+    }
+
+    .fighters-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .fighter-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .fighter-card:hover {
+      transform: scale(1.03);
+    }
+
+    .medal {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .fighter-photo {
+      width: 200px;
+      height: 200px;
+      top: -20;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 0px;
+      border: 3px solid white;
+    }
+
+    .fighter-name {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .fighter-role {
+      font-size: 16px;
+      color: #000;
+      margin-bottom: 10px;
+    }
+
+    .fighter-desc {
+      font-size: 15px;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="emblem.png" alt="Емблема" onclick="window.location.href='index.html'">
+  </header>
+
+  <h1>Кращі бійці підрозділу</h1>
+
+  <div class="fighters-container" id="fightersContainer"></div>
+
+  <script>
+    const fighters = [
+      {
+        medal: "🥇",
+        name: "Вакантно",
+        role: "-",
+        description: "-",
+        photo: "soldier1.png"
+      },
+      {
+        medal: "🥈",
+        name: "Вакантно",
+        role: "-",
+        description: "-",
+        photo: "soldier1.png"
+      },
+      {
+        medal: "🥉",
+        name: "Вакантно",
+        role: "-",
+        description: "-",
+        photo: "soldier1.png"
+      }
+    ];
+
+    const container = document.getElementById("fightersContainer");
+
+    fighters.forEach(fighter => {
+      const card = document.createElement("div");
+      card.className = "fighter-card";
+      card.innerHTML = `
+        <div class="medal">${fighter.medal}</div>
+        <img src="${fighter.photo}" alt="${fighter.name}" class="fighter-photo">
+        <div class="fighter-name">${fighter.name}</div>
+        <div class="fighter-role">${fighter.role}</div>
+        <div class="fighter-desc">${fighter.description}</div>
+      `;
+      container.appendChild(card);
+    });
+  </script>
+</body>
+</html>
